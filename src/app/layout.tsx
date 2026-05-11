@@ -3,7 +3,7 @@ import "./globals.css";
 import Link from "next/link";
 
 // Google Fonts disabled due to network restrictions in build environment
-// Using system fonts via CSS variables defined in globals.css
+// Using system font fallback - Tailwind will use default sans/mono fonts
 
 export const metadata: Metadata = {
   title: "x402 AI Starter Kit",

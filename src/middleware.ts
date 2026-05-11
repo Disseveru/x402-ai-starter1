@@ -1,10 +1,10 @@
-// This file is currently empty but can be used for Next.js middleware configuration
-// See: https://nextjs.org/docs/app/building-your-application/routing/middleware
+// This file contains example/template code for x402 + bazaar route configuration
+// The examples are commented out to prevent TypeScript errors
 
-// Example: Route-specific middleware configuration
-// export const config = {
-//   matcher: ['/api/deep-research', '/api/la-insights']
-// };
+export const config = {
+  // Example: Route-specific middleware configuration
+  // matcher: ['/api/deep-research', '/api/la-insights']
+};
 
 // Example: x402 + bazaar route configuration (to be added in individual route files)
 // {
