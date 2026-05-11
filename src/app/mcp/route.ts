@@ -4,10 +4,18 @@ import { facilitator } from "@coinbase/x402";
 import { env } from "@/lib/env";
 import { getOrCreateSellerAccount } from "@/lib/accounts";
 import {
+  buildOrchestrationPlan,
+  complianceRiskSchema,
+  eventFeedRankerSchema,
   extractContactSignals,
   extractContactSignalsSchema,
+  orchestrationPlanSchema,
+  outputValidationSchema,
+  rankRealtimeEvents,
+  scoreComplianceRisk,
   scoreLead,
   scoreLeadSchema,
+  validateOutputAgainstSources,
 } from "@/lib/seller-services";
 
 let handler: ReturnType<typeof createPaidMcpHandler> | null = null;
@@ -38,6 +46,58 @@ async function getHandler() {
           {},
           async (args) => {
             const result = scoreLead(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "validate_output_against_sources",
+          "Validate JSON output structure and source support to reduce hallucination risk.",
+          { price: 0.004 },
+          outputValidationSchema.shape,
+          {},
+          async (args) => {
+            const result = validateOutputAgainstSources(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "score_compliance_risk",
+          "Run deterministic pre-transaction compliance and risk checks.",
+          { price: 0.005 },
+          complianceRiskSchema.shape,
+          {},
+          async (args) => {
+            const result = scoreComplianceRisk(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "rank_realtime_events",
+          "Rank real-time event feeds by relevance, confidence, and freshness.",
+          { price: 0.0045 },
+          eventFeedRankerSchema.shape,
+          {},
+          async (args) => {
+            const result = rankRealtimeEvents(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "build_orchestration_plan",
+          "Build dependency-aware multi-agent execution batches from task graphs.",
+          { price: 0.0045 },
+          orchestrationPlanSchema.shape,
+          {},
+          async (args) => {
+            const result = buildOrchestrationPlan(args);
             return {
               content: [{ type: "text", text: JSON.stringify(result) }],
             };

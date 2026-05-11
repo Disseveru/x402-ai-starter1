@@ -53,6 +53,10 @@ const suggestions = {
     "Use extract_contact_signals on this content: 'Contact sales@acme.com, +1 (415) 555-0112, https://acme.com'.",
   "Use paid lead scoring":
     "Use score_lead with companySize 300, budgetUsd 25000, timelineDays 21, decisionMakerEngaged true, and useCaseClarity high.",
+  "Use paid output validation":
+    'Use validate_output_against_sources with outputJson "{\\"company\\":\\"Acme\\",\\"amount\\":1200}" requiredFields ["company","amount"] and sourceSnippets ["Invoice shows Acme amount 1200"]',
+  "Use paid compliance risk":
+    "Use score_compliance_risk with amountUsd 22000, destinationCountry US, transactionType payout, userKycLevel basic, sanctionsFlag false, pepFlag false, piiPayload true.",
   "What's my account balance?": "Check your account balance.",
   "Use an unpaid remotetool":
     "Please greet the user with 'hello-remote' by the name: 'user'",

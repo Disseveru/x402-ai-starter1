@@ -21,6 +21,10 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Sellable paid services:
   - `extract_contact_signals` (MCP tool) and `/api/v1/contact-signals` (HTTP API)
   - `score_lead` (MCP tool) and `/api/v1/lead-score` (HTTP API)
+  - `validate_output_against_sources` and `/api/v1/output-validation`
+  - `score_compliance_risk` and `/api/v1/compliance-risk`
+  - `rank_realtime_events` and `/api/v1/event-feed-ranker`
+  - `build_orchestration_plan` and `/api/v1/orchestration-plan`
 
 ## Tech Stack
 
@@ -90,12 +94,44 @@ By default, the app uses the `base-sepolia` network, or "testnet". This is a tes
      - `score` (`0-100`), `tier` (`hot | warm | cold`)
      - Deterministic scoring breakdown and recommendation
 
+3. `validate_output_against_sources` - Price: `$0.004`
+   - Input:
+     - `outputJson` (`string`, serialized JSON)
+     - `requiredFields` (`string[]`)
+     - `sourceSnippets` (`string[]`)
+   - Output:
+     - `riskScore` (`0-100`), `verdict` (`pass | review | reject`)
+     - Missing required fields and unsupported claims
+
+4. `score_compliance_risk` - Price: `$0.005`
+   - Input:
+     - `amountUsd`, `destinationCountry`, `transactionType`, `userKycLevel`
+     - `sanctionsFlag`, `pepFlag`, `piiPayload`
+   - Output:
+     - `riskScore` and `decision` (`approve | manual_review | block`)
+
+5. `rank_realtime_events` - Price: `$0.0045`
+   - Input:
+     - Event list with `relevance`, `confidence`, and `publishedAtIso`
+   - Output:
+     - Ranked events with deterministic freshness and aggregate score
+
+6. `build_orchestration_plan` - Price: `$0.0045`
+   - Input:
+     - Task graph with dependencies, priority, and estimated durations
+   - Output:
+     - Topological order + execution batches for multi-agent workflows
+
 ### HTTP paid APIs
 
 Protected by x402 middleware:
 
 - `POST /api/v1/contact-signals` - Price: `$0.01`
 - `POST /api/v1/lead-score` - Price: `$0.015`
+- `POST /api/v1/output-validation` - Price: `$0.02`
+- `POST /api/v1/compliance-risk` - Price: `$0.03`
+- `POST /api/v1/event-feed-ranker` - Price: `$0.02`
+- `POST /api/v1/orchestration-plan` - Price: `$0.02`
 
 Both APIs:
 - Use strict schema validation
@@ -104,6 +140,14 @@ Both APIs:
 - Apply in-memory per-IP rate limiting (instance-local; use shared storage like Redis for global production limits)
 - Rate limiting keys use `x-forwarded-for`; configure trusted proxies correctly in production
 - Emit structured logs with request id and duration
+
+## Agentic Market Validation Notes
+
+- `https://agentic.market/validate` was not directly retrievable in this execution environment, so seller requirements were aligned to generally expected marketplace validation standards:
+  - strict schemas
+  - deterministic outputs and errors
+  - versioned APIs
+  - documented pricing and service behavior
 
 ## Going to Production
 
