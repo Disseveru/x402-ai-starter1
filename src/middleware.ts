@@ -71,6 +71,23 @@ export const middleware = paymentMiddleware(
           tags: ['trend-forecast', 'future-trends', 'strategy']
         }
       }
+    },
+    'POST /api/grok-deep-research': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.22',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Premium Grok Deep Research - multi-step reasoning, real citations, maximum truth-seeking',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'premium-research',
+          tags: ['grok-research', 'deep-analysis', 'truth-seeking', 'xai']
+        }
+      }
     }
   },
   {
@@ -79,5 +96,5 @@ export const middleware = paymentMiddleware(
 );
 
 export const config = {
-  matcher: ['/api/deep-research', '/api/la-insights', '/api/competitor-analysis', '/api/trend-forecast']
+  matcher: ['/api/deep-research', '/api/la-insights', '/api/competitor-analysis', '/api/trend-forecast', '/api/grok-deep-research']
 };
