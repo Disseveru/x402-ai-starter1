@@ -1,12 +1,13 @@
-# Deep Research & Insights Agent
+# SKILL.md
 
-This is a paid x402 endpoint for deep, agentic research on any topic. Agents can call it to get comprehensive, up-to-date competitive intelligence, market analysis, LA/local insights, or custom deep dives.
+## Deep Research Agent
+Provides comprehensive, multi-source deep research on any topic with citations and structured output.
 
-## How to call
-POST /api/research or use the available routes with x402 payment.
+**Endpoint:** GET /api/deep-research
+**Price:** $0.03 USDC
 
-Price: Starts at $0.01–$0.05 per query depending on complexity.
+## LA Insights
+Real-time and localized insights on Los Angeles: events, traffic, nightlife, real estate trends, etc.
 
-Provides high-quality, cited, multi-source research without hallucinations.
-
-**Perfect for autonomous agents needing real intel.**
+**Endpoint:** GET /api/la-insights
+**Price:** $0.02 USDC

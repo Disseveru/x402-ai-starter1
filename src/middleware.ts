@@ -1,113 +1,43 @@
-import { NextRequest, NextResponse } from "next/server";
-import { paymentMiddleware } from "x402-next";
-import { facilitator } from "@coinbase/x402";
-import { env } from "./lib/env";
-import { getOrCreateSellerAccount } from "./lib/accounts";
+// Example addition for new routes with x402 + bazaar
 
-const network = env.NETWORK;
-const sellerAccount = await getOrCreateSellerAccount();
+export const config = {
+  matcher: ['/api/deep-research', '/api/la-insights', ...existing]
+};
 
-export const x402Middleware = paymentMiddleware(
-  sellerAccount.address,
-  {
-    // pages
-    "/blog": {
-      price: "$0.001",
-      network,
-      config: {
-        description: "Access to protected content",
-      },
-    },
-    // api routes
-    "/api/add": {
-      price: "$0.005",
-      network,
-      config: {
-        description: "Access to protected content",
-      },
-    },
-    "/api/v1/contact-signals": {
-      price: "$0.01",
-      network,
-      config: {
-        description: "Extract contact signals from unstructured data",
-      },
-    },
-    "/api/v1/lead-score": {
-      price: "$0.015",
-      network,
-      config: {
-        description: "Score and prioritize B2B sales leads",
-      },
-    },
-    "/api/v1/output-validation": {
-      price: "$0.02",
-      network,
-      config: {
-        description: "Validate agent outputs against schema and supporting sources",
-      },
-    },
-    "/api/v1/compliance-risk": {
-      price: "$0.03",
-      network,
-      config: {
-        description: "Pre-transaction compliance and risk scoring",
-      },
-    },
-    "/api/v1/event-feed-ranker": {
-      price: "$0.02",
-      network,
-      config: {
-        description: "Rank real-time event feeds for agent consumption",
-      },
-    },
-    "/api/v1/orchestration-plan": {
-      price: "$0.02",
-      network,
-      config: {
-        description: "Create dependency-aware orchestration plans for agent workflows",
-      },
-    },
+// In route handlers or config:
+{
+  'GET /api/deep-research': {
+    accepts: [{
+      scheme: 'exact',
+      price: '$0.03',
+      network: 'eip155:8453',
+      payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+    }],
+    description: 'Deep multi-source research reports with citations',
+    mimeType: 'application/json',
+    extensions: {
+      bazaar: {
+        discoverable: true,
+        category: 'research',
+        tags: ['deep-research', 'analysis', 'intelligence']
+      }
+    }
   },
-  facilitator
-);
-
-export default async function middleware(request: NextRequest) {
-  // run middleware for all api routes
-  if (request.nextUrl.pathname.startsWith("/api")) {
-    return x402Middleware(request);
-  } else {
-    // for normal pages, only run middleware if it's a bot
-    const isScraper = checkIsScraper(request);
-    if (isScraper) {
-      return x402Middleware(request);
-    } else {
-      return NextResponse.next();
+  'GET /api/la-insights': {
+    accepts: [{
+      scheme: 'exact',
+      price: '$0.02',
+      network: 'eip155:8453',
+      payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+    }],
+    description: 'Localized LA insights: events, traffic, trends',
+    mimeType: 'application/json',
+    extensions: {
+      bazaar: {
+        discoverable: true,
+        category: 'insights',
+        tags: ['los-angeles', 'local', 'real-time']
+      }
     }
   }
 }
-
-function checkIsScraper(request: NextRequest) {
-  const scraperRegex =
-    /Bot|AI2Bot|Ai2Bot-Dolma|aiHitBot|Amazonbot|anthropic-ai|Applebot|Applebot-Extended|Brightbot 1.0|Bytespider|CCBot|ChatGPT-User|Claude-Web|ClaudeBot|cohere-ai|cohere-training-data-crawler|Cotoyogi|Crawlspace|Diffbot|DuckAssistBot|FacebookBot|Factset_spyderbot|FirecrawlAgent|FriendlyCrawler|Google-Extended|GoogleOther|GoogleOther-Image|GoogleOther-Video|GPTBot|iaskspider\/2.0|ICC-Crawler|ImagesiftBot|img2dataset|ISSCyberRiskCrawler|Kangaroo Bot|meta-externalagent|Meta-ExternalAgent|meta-externalfetcher|Meta-ExternalFetcher|NovaAct|OAI-SearchBot|omgili|omgilibot|Operator|PanguBot|Perplexity-User|PerplexityBot|PetalBot|Scrapy|SemrushBot-OCOB|SemrushBot-SWA|Sidetrade indexer bot|TikTokSpider|Timpibot|VelenPublicWebCrawler|Webzio-Extended|YouBot/i;
-
-  const userAgent = request.headers.get("user-agent");
-  const botUserAgent = scraperRegex.test(userAgent ?? "");
-
-  const manualBot = request.nextUrl.searchParams.get("bot") === "true";
-
-  return botUserAgent || manualBot;
-}
-
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     */
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
-  runtime: "nodejs",
-};
