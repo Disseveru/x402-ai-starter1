@@ -7,6 +7,20 @@ type RateLimitEntry = {
 };
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
+let lastCleanupAt = 0;
+
+function cleanupExpiredEntries(now: number) {
+  // Run cleanup at most once per minute to keep overhead low.
+  if (now - lastCleanupAt < 60_000) {
+    return;
+  }
+  for (const [key, entry] of rateLimitStore.entries()) {
+    if (now > entry.resetAt) {
+      rateLimitStore.delete(key);
+    }
+  }
+  lastCleanupAt = now;
+}
 
 export function validateSellerApiKey(request: NextRequest) {
   if (!env.SELLER_API_KEY) {
@@ -29,6 +43,7 @@ function getRateLimitKey(request: NextRequest) {
 
 export function validateRateLimit(request: NextRequest) {
   const now = Date.now();
+  cleanupExpiredEntries(now);
   const resetAt = now + 60_000;
   const key = getRateLimitKey(request);
   const existing = rateLimitStore.get(key);
