@@ -8,6 +8,8 @@ export const env = createEnv({
     CDP_API_KEY_SECRET: z.string(),
     NETWORK: z.enum(["base-sepolia", "base"]).default("base-sepolia"),
     URL: z.string().url().default("http://localhost:3000"),
+    SELLER_API_KEY: z.string().optional(),
+    SELLER_RATE_LIMIT_PER_MINUTE: z.coerce.number().int().min(1).default(60),
   },
 
   /**
@@ -22,6 +24,8 @@ export const env = createEnv({
     URL: process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : undefined,
+    SELLER_API_KEY: process.env.SELLER_API_KEY,
+    SELLER_RATE_LIMIT_PER_MINUTE: process.env.SELLER_RATE_LIMIT_PER_MINUTE,
   },
 
   /**

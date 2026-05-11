@@ -26,6 +26,48 @@ export const x402Middleware = paymentMiddleware(
         description: "Access to protected content",
       },
     },
+    "/api/v1/contact-signals": {
+      price: "$0.01",
+      network,
+      config: {
+        description: "Extract contact signals from unstructured data",
+      },
+    },
+    "/api/v1/lead-score": {
+      price: "$0.015",
+      network,
+      config: {
+        description: "Score and prioritize B2B sales leads",
+      },
+    },
+    "/api/v1/output-validation": {
+      price: "$0.02",
+      network,
+      config: {
+        description: "Validate agent outputs against schema and supporting sources",
+      },
+    },
+    "/api/v1/compliance-risk": {
+      price: "$0.03",
+      network,
+      config: {
+        description: "Pre-transaction compliance and risk scoring",
+      },
+    },
+    "/api/v1/event-feed-ranker": {
+      price: "$0.02",
+      network,
+      config: {
+        description: "Rank real-time event feeds for agent consumption",
+      },
+    },
+    "/api/v1/orchestration-plan": {
+      price: "$0.02",
+      network,
+      config: {
+        description: "Create dependency-aware orchestration plans for agent workflows",
+      },
+    },
   },
   facilitator
 );

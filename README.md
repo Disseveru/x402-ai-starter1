@@ -18,6 +18,13 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Paywalled APIs
 - Paywalled pages (for bots)
 - Secure server managed wallets
+- Sellable paid services:
+  - `extract_contact_signals` (MCP tool) and `/api/v1/contact-signals` (HTTP API)
+  - `score_lead` (MCP tool) and `/api/v1/lead-score` (HTTP API)
+  - `validate_output_against_sources` and `/api/v1/output-validation`
+  - `score_compliance_risk` and `/api/v1/compliance-risk`
+  - `rank_realtime_events` and `/api/v1/event-feed-ranker`
+  - `build_orchestration_plan` and `/api/v1/orchestration-plan`
 
 ## Tech Stack
 
@@ -45,6 +52,11 @@ pnpm install
 - `CDP_API_KEY_ID`
 - `CDP_API_KEY_SECRET`
 - `CDP_WALLET_SECRET`
+- `NETWORK` (`base-sepolia` for testnet)
+- `URL` (defaults to `http://localhost:3000` in local dev)
+- Optional hardening:
+  - `SELLER_API_KEY` (required in `x-seller-api-key` header when set)
+  - `SELLER_RATE_LIMIT_PER_MINUTE` (default `60`)
 
 Using AI Gateway requires either a Vercel OIDC token, or an API Key.
 To get an OIDC token, simply run `vc link` then `vc env pull`. An API can be obtained from the [AI Gateway dashboard](https://vercel.com/ai-gateway).
@@ -58,6 +70,77 @@ Using AI Gateway isn't required, you can use any AI SDK model provider and its a
 ## Testing Payments
 
 By default, the app uses the `base-sepolia` network, or "testnet". This is a testing network with fake money. The app is configured to automically request more funds from a faucet (source of testnet money) when your account is running low. You can also do this yourself in the [Coinbase CDP dashboard](https://portal.cdp.coinbase.com/products/faucet?token=USDC&network=base-sepolia).
+
+## Service Catalog (Seller-Focused)
+
+### MCP paid tools (`/mcp`)
+
+1. `extract_contact_signals` - Price: `$0.0025`
+   - Input:
+     - `content` (`string`, 20-20000 chars)
+     - `maxResults` (`int`, 1-25, default 10)
+   - Output:
+     - Deduped `emails`, `phones`, `urls`
+     - Summary counts and `hasContactSignals`
+
+2. `score_lead` - Price: `$0.0035`
+   - Input:
+     - `companySize` (`int`)
+     - `budgetUsd` (`int`)
+     - `timelineDays` (`int`)
+     - `decisionMakerEngaged` (`boolean`)
+     - `useCaseClarity` (`low | medium | high`)
+   - Output:
+     - `score` (`0-100`), `tier` (`hot | warm | cold`)
+     - Deterministic scoring breakdown and recommendation
+
+3. `validate_output_against_sources` - Price: `$0.004`
+   - Input:
+     - `outputJson` (`string`, serialized JSON)
+     - `requiredFields` (`string[]`)
+     - `sourceSnippets` (`string[]`)
+   - Output:
+     - `riskScore` (`0-100`), `verdict` (`pass | review | reject`)
+     - Missing required fields and unsupported claims
+
+4. `score_compliance_risk` - Price: `$0.005`
+   - Input:
+     - `amountUsd`, `destinationCountry`, `transactionType`, `userKycLevel`
+     - `sanctionsFlag`, `pepFlag`, `piiPayload`
+   - Output:
+     - `riskScore` and `decision` (`approve | manual_review | block`)
+
+5. `rank_realtime_events` - Price: `$0.0045`
+   - Input:
+     - Event list with `relevance`, `confidence`, and `publishedAtIso`
+   - Output:
+     - Ranked events with deterministic freshness and aggregate score
+
+6. `build_orchestration_plan` - Price: `$0.0045`
+   - Input:
+     - Task graph with dependencies, priority, and estimated durations
+   - Output:
+     - Topological order + execution batches for multi-agent workflows
+
+### HTTP paid APIs
+
+Protected by x402 middleware:
+
+- `POST /api/v1/contact-signals` - Price: `$0.01`
+- `POST /api/v1/lead-score` - Price: `$0.015`
+- `POST /api/v1/output-validation` - Price: `$0.02`
+- `POST /api/v1/compliance-risk` - Price: `$0.03`
+- `POST /api/v1/event-feed-ranker` - Price: `$0.02`
+- `POST /api/v1/orchestration-plan` - Price: `$0.02`
+
+Both APIs:
+- Use strict schema validation
+- Return deterministic `400` for bad payloads
+- Support optional `x-seller-api-key` auth (when `SELLER_API_KEY` is set)
+- Apply in-memory per-IP rate limiting (instance-local; use shared storage like Redis for global production limits)
+- Rate limiting keys use `x-forwarded-for`; configure trusted proxies correctly in production
+- Emit structured logs with request id and duration
+- Contact extraction uses lightweight regex heuristics in this starter; for example, uncommon international phone formats or edge-case RFC email forms can be missed, so production deployments should consider specialized validators/parsers for stricter guarantees
 
 ## Going to Production
 

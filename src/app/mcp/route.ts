@@ -3,6 +3,20 @@ import z from "zod";
 import { facilitator } from "@coinbase/x402";
 import { env } from "@/lib/env";
 import { getOrCreateSellerAccount } from "@/lib/accounts";
+import {
+  buildOrchestrationPlan,
+  complianceRiskSchema,
+  eventFeedRankerSchema,
+  extractContactSignals,
+  extractContactSignalsSchema,
+  orchestrationPlanSchema,
+  outputValidationSchema,
+  rankRealtimeEvents,
+  scoreComplianceRisk,
+  scoreLead,
+  scoreLeadSchema,
+  validateOutputAgainstSources,
+} from "@/lib/seller-services";
 
 let handler: ReturnType<typeof createPaidMcpHandler> | null = null;
 
@@ -12,35 +26,80 @@ async function getHandler() {
     handler = createPaidMcpHandler(
       (server) => {
         server.paidTool(
-          "get_random_number",
-          "Get a random number between two numbers",
-          { price: 0.001 },
-          {
-            min: z.number().int(),
-            max: z.number().int(),
-          },
+          "extract_contact_signals",
+          "Extract contact signals (emails, phones, URLs) from unstructured text.",
+          { price: 0.0025 },
+          extractContactSignalsSchema.shape,
           {},
           async (args) => {
-            const randomNumber =
-              Math.floor(Math.random() * (args.max - args.min + 1)) + args.min;
+            const result = extractContactSignals(args);
             return {
-              content: [{ type: "text", text: randomNumber.toString() }],
+              content: [{ type: "text", text: JSON.stringify(result) }],
             };
           }
         );
         server.paidTool(
-          "add",
-          "Add two numbers",
-          { price: 0.001 },
-          {
-            a: z.number().int(),
-            b: z.number().int(),
-          },
+          "score_lead",
+          "Score B2B leads using budget, timeline, company size, and qualification signals.",
+          { price: 0.0035 },
+          scoreLeadSchema.shape,
           {},
           async (args) => {
-            const result = args.a + args.b;
+            const result = scoreLead(args);
             return {
-              content: [{ type: "text", text: result.toString() }],
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "validate_output_against_sources",
+          "Validate JSON output structure and source support to reduce hallucination risk.",
+          { price: 0.004 },
+          outputValidationSchema.shape,
+          {},
+          async (args) => {
+            const result = validateOutputAgainstSources(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "score_compliance_risk",
+          "Run deterministic pre-transaction compliance and risk checks.",
+          { price: 0.005 },
+          complianceRiskSchema.shape,
+          {},
+          async (args) => {
+            const result = scoreComplianceRisk(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "rank_realtime_events",
+          "Rank real-time event feeds by relevance, confidence, and freshness.",
+          { price: 0.0045 },
+          eventFeedRankerSchema.shape,
+          {},
+          async (args) => {
+            const result = rankRealtimeEvents(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
+            };
+          }
+        );
+        server.paidTool(
+          "build_orchestration_plan",
+          "Build dependency-aware multi-agent execution batches from task graphs.",
+          { price: 0.0045 },
+          orchestrationPlanSchema.shape,
+          {},
+          async (args) => {
+            const result = buildOrchestrationPlan(args);
+            return {
+              content: [{ type: "text", text: JSON.stringify(result) }],
             };
           }
         );

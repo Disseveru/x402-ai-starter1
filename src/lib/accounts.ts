@@ -61,7 +61,7 @@ export async function getOrCreatePurchaserAccount(): Promise<Account> {
     }
   }
 
-  return toAccount(account);
+  return toAccount(account as Parameters<typeof toAccount>[0]);
 }
 
 export async function getOrCreateSellerAccount(): Promise<Account> {
@@ -69,5 +69,5 @@ export async function getOrCreateSellerAccount(): Promise<Account> {
   const account = await cdpClient.evm.getOrCreateAccount({
     name: "Seller",
   });
-  return toAccount(account);
+  return toAccount(account as Parameters<typeof toAccount>[0]);
 }
