@@ -37,6 +37,40 @@ export const middleware = paymentMiddleware(
           tags: ['los-angeles', 'local', 'real-time']
         }
       }
+    },
+    'POST /api/competitor-analysis': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.045',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'In-depth competitor analysis with strategic insights and market positioning',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'business-intelligence',
+          tags: ['competitor-analysis', 'strategy', 'market-research']
+        }
+      }
+    },
+    'POST /api/trend-forecast': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.04',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Data-driven trend forecasting and future scenario analysis',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'foresight',
+          tags: ['trend-forecast', 'future-trends', 'strategy']
+        }
+      }
     }
   },
   {
@@ -45,5 +79,5 @@ export const middleware = paymentMiddleware(
 );
 
 export const config = {
-  matcher: ['/api/deep-research', '/api/la-insights']
+  matcher: ['/api/deep-research', '/api/la-insights', '/api/competitor-analysis', '/api/trend-forecast']
 };
