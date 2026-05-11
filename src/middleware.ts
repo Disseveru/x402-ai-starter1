@@ -26,6 +26,20 @@ export const x402Middleware = paymentMiddleware(
         description: "Access to protected content",
       },
     },
+    "/api/v1/contact-signals": {
+      price: "$0.01",
+      network,
+      config: {
+        description: "Extract contact signals from unstructured data",
+      },
+    },
+    "/api/v1/lead-score": {
+      price: "$0.015",
+      network,
+      config: {
+        description: "Score and prioritize B2B sales leads",
+      },
+    },
   },
   facilitator
 );

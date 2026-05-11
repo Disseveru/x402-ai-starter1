@@ -1,0 +1,48 @@
+import { NextRequest } from "next/server";
+import { env } from "./env";
+
+type RateLimitEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const rateLimitStore = new Map<string, RateLimitEntry>();
+
+export function validateSellerApiKey(request: NextRequest) {
+  if (!env.SELLER_API_KEY) {
+    return { ok: true as const };
+  }
+
+  const requestApiKey = request.headers.get("x-seller-api-key");
+  if (requestApiKey !== env.SELLER_API_KEY) {
+    return { ok: false as const, status: 401, error: "Unauthorized" };
+  }
+
+  return { ok: true as const };
+}
+
+function getRateLimitKey(request: NextRequest) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  return `${request.nextUrl.pathname}:${ip}`;
+}
+
+export function validateRateLimit(request: NextRequest) {
+  const now = Date.now();
+  const resetAt = now + 60_000;
+  const key = getRateLimitKey(request);
+  const existing = rateLimitStore.get(key);
+
+  if (!existing || now > existing.resetAt) {
+    rateLimitStore.set(key, { count: 1, resetAt });
+    return { ok: true as const };
+  }
+
+  if (existing.count >= env.SELLER_RATE_LIMIT_PER_MINUTE) {
+    return { ok: false as const, status: 429, error: "Rate limit exceeded" };
+  }
+
+  existing.count += 1;
+  rateLimitStore.set(key, existing);
+  return { ok: true as const };
+}

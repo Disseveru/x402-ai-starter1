@@ -49,7 +49,10 @@ const models = [
   },
 ];
 const suggestions = {
-  "Use a paid tool": "Generate a random number between 1 and 10.",
+  "Use paid contact extraction":
+    "Use extract_contact_signals on this content: 'Contact sales@acme.com, +1 (415) 555-0112, https://acme.com'.",
+  "Use paid lead scoring":
+    "Use score_lead with companySize 300, budgetUsd 25000, timelineDays 21, decisionMakerEngaged true, and useCaseClarity high.",
   "What's my account balance?": "Check your account balance.",
   "Use an unpaid remotetool":
     "Please greet the user with 'hello-remote' by the name: 'user'",

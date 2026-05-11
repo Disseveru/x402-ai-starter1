@@ -18,6 +18,9 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Paywalled APIs
 - Paywalled pages (for bots)
 - Secure server managed wallets
+- Sellable paid services:
+  - `extract_contact_signals` (MCP tool) and `/api/v1/contact-signals` (HTTP API)
+  - `score_lead` (MCP tool) and `/api/v1/lead-score` (HTTP API)
 
 ## Tech Stack
 
@@ -45,6 +48,11 @@ pnpm install
 - `CDP_API_KEY_ID`
 - `CDP_API_KEY_SECRET`
 - `CDP_WALLET_SECRET`
+- `NETWORK` (`base-sepolia` for testnet)
+- `URL` (defaults to `http://localhost:3000` in local dev)
+- Optional hardening:
+  - `SELLER_API_KEY` (required in `x-seller-api-key` header when set)
+  - `SELLER_RATE_LIMIT_PER_MINUTE` (default `60`)
 
 Using AI Gateway requires either a Vercel OIDC token, or an API Key.
 To get an OIDC token, simply run `vc link` then `vc env pull`. An API can be obtained from the [AI Gateway dashboard](https://vercel.com/ai-gateway).
@@ -58,6 +66,43 @@ Using AI Gateway isn't required, you can use any AI SDK model provider and its a
 ## Testing Payments
 
 By default, the app uses the `base-sepolia` network, or "testnet". This is a testing network with fake money. The app is configured to automically request more funds from a faucet (source of testnet money) when your account is running low. You can also do this yourself in the [Coinbase CDP dashboard](https://portal.cdp.coinbase.com/products/faucet?token=USDC&network=base-sepolia).
+
+## Service Catalog (Seller-Focused)
+
+### MCP paid tools (`/mcp`)
+
+1. `extract_contact_signals` - Price: `$0.0025`
+   - Input:
+     - `content` (`string`, 20-20000 chars)
+     - `maxResults` (`int`, 1-25, default 10)
+   - Output:
+     - Deduped `emails`, `phones`, `urls`
+     - Summary counts and `hasContactSignals`
+
+2. `score_lead` - Price: `$0.0035`
+   - Input:
+     - `companySize` (`int`)
+     - `budgetUsd` (`int`)
+     - `timelineDays` (`int`)
+     - `decisionMakerEngaged` (`boolean`)
+     - `useCaseClarity` (`low | medium | high`)
+   - Output:
+     - `score` (`0-100`), `tier` (`hot | warm | cold`)
+     - Deterministic scoring breakdown and recommendation
+
+### HTTP paid APIs
+
+Protected by x402 middleware:
+
+- `POST /api/v1/contact-signals` - Price: `$0.01`
+- `POST /api/v1/lead-score` - Price: `$0.015`
+
+Both APIs:
+- Use strict schema validation
+- Return deterministic `400` for bad payloads
+- Support optional `x-seller-api-key` auth (when `SELLER_API_KEY` is set)
+- Apply in-memory per-IP rate limiting
+- Emit structured logs with request id and duration
 
 ## Going to Production
 
