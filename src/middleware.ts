@@ -88,6 +88,74 @@ export const middleware = paymentMiddleware(
           tags: ['grok-research', 'deep-analysis', 'truth-seeking', 'xai']
         }
       }
+    },
+    'POST /api/grok-agent-orchestrator': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.18',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Multi-agent orchestration planner - breaks complex goals into executable agent plans',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'agent-infrastructure',
+          tags: ['agent-orchestration', 'planning', 'multi-agent']
+        }
+      }
+    },
+    'POST /api/grok-truth-verifier': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.12',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Maximum truth-seeking claim verification with confidence scoring',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'verification',
+          tags: ['truth-verification', 'fact-checking', 'anti-hallucination']
+        }
+      }
+    },
+    'POST /api/grok-x-intelligence': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.15',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Real-time X/Twitter intelligence - sentiment, influencers, narrative tracking',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'social-intelligence',
+          tags: ['x-intelligence', 'twitter-analysis', 'real-time-trends']
+        }
+      }
+    },
+    'POST /api/grok-strategic-planner': {
+      accepts: [{
+        scheme: 'exact',
+        price: '$0.20',
+        network: 'eip155:8453',
+        payTo: '0xe9662af510b5d63b5e507ff2822023810c82ba8a'
+      }],
+      description: 'Long-term strategic planning with scenario modeling and risk analysis',
+      mimeType: 'application/json',
+      extensions: {
+        bazaar: {
+          discoverable: true,
+          category: 'strategy',
+          tags: ['strategic-planning', 'scenario-analysis', 'foresight']
+        }
+      }
     }
   },
   {
@@ -96,5 +164,5 @@ export const middleware = paymentMiddleware(
 );
 
 export const config = {
-  matcher: ['/api/deep-research', '/api/la-insights', '/api/competitor-analysis', '/api/trend-forecast', '/api/grok-deep-research']
+  matcher: ['/api/deep-research', '/api/la-insights', '/api/competitor-analysis', '/api/trend-forecast', '/api/grok-deep-research', '/api/grok-agent-orchestrator', '/api/grok-truth-verifier', '/api/grok-x-intelligence', '/api/grok-strategic-planner']
 };
