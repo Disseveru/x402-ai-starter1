@@ -140,7 +140,7 @@ Both APIs:
 - Apply in-memory per-IP rate limiting (instance-local; use shared storage like Redis for global production limits)
 - Rate limiting keys use `x-forwarded-for`; configure trusted proxies correctly in production
 - Emit structured logs with request id and duration
-- Contact extraction uses lightweight regex heuristics in this starter; production deployments should consider specialized validators/parsers for stricter guarantees
+- Contact extraction uses lightweight regex heuristics in this starter; for example, uncommon international phone formats or edge-case RFC email forms can be missed, so production deployments should consider specialized validators/parsers for stricter guarantees
 
 ## Going to Production
 
