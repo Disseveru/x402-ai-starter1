@@ -1,34 +1,38 @@
-import { NextRequest, NextResponse } from "next/server";
-import { generateText } from "ai";
+import { NextRequest } from "next/server";
+import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { topic = "general", limit = 6 } = body;
+    const { topic = "general" } = body;
 
-    const { text } = await generateText({
+    const result = await streamText({
       model: openai("gpt-4o-mini"),
-      system: `You are a local Los Angeles expert and cultural analyst. Provide authentic, up-to-date insights about the given topic in LA. Include current trends, local sentiment, practical advice, hidden gems, and real-time context. Be specific to Los Angeles culture, traffic, events, neighborhoods, and lifestyle. Structure with: Current Vibe, Key Insights, Local Tips, What to Watch.`,
-      prompt: `Topic: ${topic}. Give me fresh, authentic Los Angeles insights right now.`,
-      maxTokens: 1200,
+      system: `You are a native Los Angeles local expert, cultural anthropologist, and real-time trend analyst who lives in LA.
+
+For the given topic, deliver authentic, hyper-local LA insights right now:
+- Current vibe and sentiment in LA
+- Real neighborhoods, streets, and venues (use actual LA names)
+- Local insider tips that tourists don't know
+- Current events, traffic patterns, or cultural moments happening now
+- Hidden gems and authentic experiences
+
+Structure with:
+- Current Vibe in LA
+- Key Local Insights
+- Insider Tips & Hidden Gems
+- What to Watch / What's Next
+
+Be extremely specific to Los Angeles culture, traffic, food, neighborhoods (Silver Lake, Downtown, Venice, etc.), and real-time context. Never sound generic.`,
+      prompt: `Topic: ${topic}. Give me fresh, authentic Los Angeles insights happening right now in 2026.`,
+      maxTokens: 1500,
+      temperature: 0.8,
     });
 
-    const result = {
-      topic,
-      location: "Los Angeles, CA",
-      insights: text,
-      generatedAt: new Date().toISOString(),
-      model: "gpt-4o-mini",
-      confidence: 0.93,
-    };
-
-    return NextResponse.json(result);
+    return result.toDataStreamResponse();
   } catch (error: any) {
-    console.error("LA insights error:", error);
-    return NextResponse.json(
-      { error: "Insights generation failed", details: error.message },
-      { status: 500 }
-    );
+    console.error("LA insights streaming error:", error);
+    return new Response(JSON.stringify({ error: "Insights failed", details: error.message }), { status: 500 });
   }
 }
