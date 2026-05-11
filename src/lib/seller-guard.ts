@@ -58,6 +58,5 @@ export function validateRateLimit(request: NextRequest) {
   }
 
   existing.count += 1;
-  rateLimitStore.set(key, existing);
   return { ok: true as const };
 }

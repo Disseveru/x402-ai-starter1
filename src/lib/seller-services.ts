@@ -38,6 +38,7 @@ export function extractContactSignals(input: ExtractContactSignalsInput) {
   const emails = uniqueLower(parsed.content.match(emailRegex) ?? []);
   const phones = uniqueLower(parsed.content.match(phoneRegex) ?? []);
   const urls = uniqueLower(parsed.content.match(urlRegex) ?? []);
+  const hasContactSignals = emails.length > 0 || phones.length > 0 || urls.length > 0;
 
   return {
     emails: pickTop(emails, parsed.maxResults),
@@ -47,7 +48,7 @@ export function extractContactSignals(input: ExtractContactSignalsInput) {
       emailCount: emails.length,
       phoneCount: phones.length,
       urlCount: urls.length,
-      hasContactSignals: emails.length > 0 || phones.length > 0 || urls.length > 0,
+      hasContactSignals,
     },
   };
 }
