@@ -1,7 +1,11 @@
 import { z } from "zod";
 
+const MAX_CONTACT_CONTENT_LENGTH = 20_000;
+const MIN_PHONE_DIGITS = 10;
+const MAX_PHONE_DIGITS = 15;
+
 export const extractContactSignalsSchema = z.object({
-  content: z.string().min(20).max(20000),
+  content: z.string().min(20).max(MAX_CONTACT_CONTENT_LENGTH),
   maxResults: z.number().int().min(1).max(25).default(10),
 });
 
@@ -89,7 +93,10 @@ function pickTop(values: string[], maxResults: number) {
 
 function hasValidPhoneDigitLength(value: string) {
   const digitsOnly = value.replace(/\D/g, "");
-  return digitsOnly.length >= 10 && digitsOnly.length <= 15;
+  return (
+    digitsOnly.length >= MIN_PHONE_DIGITS &&
+    digitsOnly.length <= MAX_PHONE_DIGITS
+  );
 }
 
 export function extractContactSignals(input: ExtractContactSignalsInput) {
@@ -182,6 +189,24 @@ function extractObjectKeys(value: unknown): string[] {
   return Object.keys(value);
 }
 
+function tokenize(value: string) {
+  return value
+    .toLowerCase()
+    .split(/[^a-z0-9]+/g)
+    .filter((token) => token.length >= 2);
+}
+
+function sourceSupportsValue(sourceBlob: string, value: string | number) {
+  if (typeof value === "number") {
+    return sourceBlob.includes(String(value));
+  }
+  const tokens = tokenize(value);
+  if (tokens.length === 0) {
+    return sourceBlob.includes(value.toLowerCase());
+  }
+  return tokens.every((token) => sourceBlob.includes(token));
+}
+
 export function validateOutputAgainstSources(input: OutputValidationInput) {
   const parsed = outputValidationSchema.parse(input);
   const parsedJson = safeJsonParse(parsed.outputJson);
@@ -208,7 +233,7 @@ export function validateOutputAgainstSources(input: OutputValidationInput) {
     if (typeof value !== "string" && typeof value !== "number") {
       return false;
     }
-    return !sourceBlob.includes(String(value).toLowerCase());
+    return !sourceSupportsValue(sourceBlob, value);
   });
 
   const fieldCoverageRatio =
@@ -245,6 +270,8 @@ export function validateOutputAgainstSources(input: OutputValidationInput) {
   };
 }
 
+// Keep this starter list intentionally conservative and review monthly against an
+// authoritative sanctions source (for example OFAC/UN) before production use.
 const highRiskCountries = new Set(["AF", "IR", "KP", "SY", "RU"]);
 const highRiskTypes = new Set(["trading", "donation"]);
 

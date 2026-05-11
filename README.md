@@ -140,14 +140,7 @@ Both APIs:
 - Apply in-memory per-IP rate limiting (instance-local; use shared storage like Redis for global production limits)
 - Rate limiting keys use `x-forwarded-for`; configure trusted proxies correctly in production
 - Emit structured logs with request id and duration
-
-## Agentic Market Validation Notes
-
-- `https://agentic.market/validate` was not directly retrievable in this execution environment, so seller requirements were aligned to generally expected marketplace validation standards:
-  - strict schemas
-  - deterministic outputs and errors
-  - versioned APIs
-  - documented pricing and service behavior
+- Contact extraction uses lightweight regex heuristics in this starter; production deployments should consider specialized validators/parsers for stricter guarantees
 
 ## Going to Production
 

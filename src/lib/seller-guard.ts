@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { isIP } from "node:net";
 import { env } from "./env";
 
 type RateLimitEntry = {
@@ -6,12 +7,15 @@ type RateLimitEntry = {
   resetAt: number;
 };
 
+const CLEANUP_INTERVAL_MS = 60_000;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
 const rateLimitStore = new Map<string, RateLimitEntry>();
 let lastCleanupAt = 0;
 
 function cleanupExpiredEntries(now: number) {
   // Run cleanup at most once per minute to keep overhead low.
-  if (now - lastCleanupAt < 60_000) {
+  if (now - lastCleanupAt < CLEANUP_INTERVAL_MS) {
     return;
   }
   for (const [key, entry] of rateLimitStore.entries()) {
@@ -38,16 +42,14 @@ export function validateSellerApiKey(request: NextRequest) {
 function getRateLimitKey(request: NextRequest) {
   const forwardedFor = request.headers.get("x-forwarded-for");
   const rawIp = forwardedFor?.split(",")[0]?.trim() || "unknown";
-  const isIpv4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(rawIp);
-  const isIpv6 = /^[a-fA-F0-9:]+$/.test(rawIp);
-  const ip = isIpv4 || isIpv6 ? rawIp : "unknown";
+  const ip = isIP(rawIp) ? rawIp : "unknown";
   return `${request.nextUrl.pathname}:${ip}`;
 }
 
 export function validateRateLimit(request: NextRequest) {
   const now = Date.now();
   cleanupExpiredEntries(now);
-  const resetAt = now + 60_000;
+  const resetAt = now + RATE_LIMIT_WINDOW_MS;
   const key = getRateLimitKey(request);
   const existing = rateLimitStore.get(key);
 
