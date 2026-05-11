@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -31,11 +33,11 @@ Structure your final response with clear markdown sections:
 
 Be authoritative, specific, and cite real-world sources whenever possible. Never use generic statements like "according to sources" — name them.`,
       prompt: query,
-      maxTokens: 2500,
+      maxOutputTokens: 2500,
       temperature: 0.7,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     console.error("Deep research streaming error:", error);
     return new Response(JSON.stringify({ error: "Research failed", details: error.message }), { status: 500 });

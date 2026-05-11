@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -25,10 +27,10 @@ Output a structured plan including:
 
 Be extremely practical and specific. Think like the best AI agent engineer in the world.`,
       prompt: `Goal: ${goal}\nConstraints: ${constraints}\n\nCreate a complete multi-agent execution plan.`,
-      maxTokens: 2500,
+      maxOutputTokens: 2500,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return new Response(JSON.stringify({ error: "Orchestration failed", details: error.message }), { status: 500 });
   }

@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -36,11 +38,11 @@ Be witty when appropriate, but deadly serious about accuracy.`;
       model: openai("gpt-4o"),
       system: systemPrompt,
       prompt: query,
-      maxTokens: 3000,
+      maxOutputTokens: 3000,
       temperature: 0.6,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     console.error("Grok Deep Research error:", error);
     return new Response(JSON.stringify({ error: "Research failed", details: error.message }), { status: 500 });
