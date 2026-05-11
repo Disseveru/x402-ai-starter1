@@ -1,17 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Google Fonts disabled due to network restrictions in build environment
+// Using system font fallback - Tailwind will use default sans/mono fonts
 
 export const metadata: Metadata = {
   title: "x402 AI Starter Kit",
@@ -26,11 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
-      >
+      <body className="antialiased h-full">
         <div className="size-full flex flex-col">
-          <header className={`${geistSans.className} border-b border-black`}>
+          <header className="border-b border-black">
             <div className="flex flex-col gap-2 w-full">
               <div className="flex flex-row gap-2 text-xl font-bold items-center justify-center">
                 <Link
