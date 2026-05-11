@@ -27,6 +27,11 @@ function pickTop(values: string[], maxResults: number) {
   return values.slice(0, maxResults);
 }
 
+function hasValidPhoneDigitLength(value: string) {
+  const digitsOnly = value.replace(/\D/g, "");
+  return digitsOnly.length >= 10 && digitsOnly.length <= 15;
+}
+
 export function extractContactSignals(input: ExtractContactSignalsInput) {
   const parsed = extractContactSignalsSchema.parse(input);
 
@@ -36,7 +41,9 @@ export function extractContactSignals(input: ExtractContactSignalsInput) {
   const urlRegex = /https?:\/\/[^\s<>"')]+/g;
 
   const emails = uniqueLower(parsed.content.match(emailRegex) ?? []);
-  const phones = uniqueLower(parsed.content.match(phoneRegex) ?? []);
+  const phones = uniqueLower(parsed.content.match(phoneRegex) ?? []).filter(
+    hasValidPhoneDigitLength
+  );
   const urls = uniqueLower(parsed.content.match(urlRegex) ?? []);
   const hasContactSignals = emails.length > 0 || phones.length > 0 || urls.length > 0;
 

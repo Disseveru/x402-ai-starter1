@@ -102,6 +102,7 @@ Both APIs:
 - Return deterministic `400` for bad payloads
 - Support optional `x-seller-api-key` auth (when `SELLER_API_KEY` is set)
 - Apply in-memory per-IP rate limiting (instance-local; use shared storage like Redis for global production limits)
+- Rate limiting keys use `x-forwarded-for`; configure trusted proxies correctly in production
 - Emit structured logs with request id and duration
 
 ## Going to Production

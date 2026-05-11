@@ -37,7 +37,10 @@ export function validateSellerApiKey(request: NextRequest) {
 
 function getRateLimitKey(request: NextRequest) {
   const forwardedFor = request.headers.get("x-forwarded-for");
-  const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  const rawIp = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  const isIpv4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(rawIp);
+  const isIpv6 = /^[a-fA-F0-9:]+$/.test(rawIp);
+  const ip = isIpv4 || isIpv6 ? rawIp : "unknown";
   return `${request.nextUrl.pathname}:${ip}`;
 }
 
