@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -25,10 +27,10 @@ For any claim, you must:
 
 Never be sycophantic. Prioritize truth above all else.`,
       prompt: `Claim to verify: ${claim}`,
-      maxTokens: 1500,
+      maxOutputTokens: 1500,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return new Response(JSON.stringify({ error: "Verification failed", details: error.message }), { status: 500 });
   }

@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -25,10 +27,10 @@ For any objective, deliver:
 
 Be realistic, data-informed, and actionable.`,
       prompt: `Objective: ${objective}\nTimeframe: ${timeframe}\nConstraints: ${constraints}\n\nCreate a complete strategic plan with scenarios.`,
-      maxTokens: 2200,
+      maxOutputTokens: 2200,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return new Response(JSON.stringify({ error: "Planning failed", details: error.message }), { status: 500 });
   }

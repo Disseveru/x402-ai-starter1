@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -24,10 +26,10 @@ Provide:
 
 Be specific with actual account names, post examples, and timing when possible.`,
       prompt: `Topic: ${topic}. Timeframe: ${timeframe}. Analyze what's happening on X right now.`,
-      maxTokens: 1800,
+      maxOutputTokens: 1800,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return new Response(JSON.stringify({ error: "X Intelligence failed", details: error.message }), { status: 500 });
   }
