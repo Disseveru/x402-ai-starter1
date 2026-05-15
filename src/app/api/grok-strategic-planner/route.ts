@@ -19,18 +19,8 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await streamText({
-      model: xai("grok-3"),
-      system: `You are Grok, a world-class strategic planner. Create comprehensive long-term strategic plans with scenario modeling.
-
-For any objective, deliver:
-- Strategic vision and key objectives
-- Phased roadmap with milestones
-- Multiple scenario analysis (best case, base case, worst case)
-- Key risks and mitigation strategies
-- Resource requirements
-- Decision checkpoints
-
-Be realistic, data-informed, and actionable.`,
+      model: xai("grok-4.3"),
+      system: `You are Grok 4.3, a world-class strategic planner. Create comprehensive long-term strategic plans with scenario modeling.`,
       prompt: `Objective: ${objective}\nTimeframe: ${timeframe}\nConstraints: ${constraints}\n\nCreate a complete strategic plan with scenarios.`,
       maxOutputTokens: 2200,
     });
