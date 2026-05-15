@@ -2,7 +2,12 @@ export const maxDuration = 60;
 
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "@ai-sdk/openai";
+
+const xai = createOpenAI({
+  baseURL: "https://api.x.ai/v1",
+  apiKey: process.env.XAI_API_KEY,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await streamText({
-      model: openai("gpt-4o"),
+      model: xai("grok-3"),
       system: `You are Grok, an expert multi-agent system architect. Given a complex goal, break it down into a complete, executable multi-agent plan.
 
 Output a structured plan including:
