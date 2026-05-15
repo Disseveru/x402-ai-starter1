@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await streamText({
-      model: xai("grok-3"),
-      system: `You are Grok, an expert multi-agent system architect. Given a complex goal, break it down into a complete, executable multi-agent plan.
+      model: xai("grok-4.3"),
+      system: `You are Grok 4.3, an expert multi-agent system architect. Given a complex goal, break it down into a complete, executable multi-agent plan.
 
 Output a structured plan including:
 - Overall strategy
