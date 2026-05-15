@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await streamText({
-      model: xai("grok-3"),
-      system: `You are Grok with real-time X intelligence. Analyze sentiment, influencers, narratives, and trending topics on X (Twitter). Be maximally truthful and cite specific posts/accounts when possible.`,
+      model: xai("grok-4.3"),
+      system: `You are Grok 4.3 with real-time X intelligence. Analyze sentiment, influencers, narratives, and trending topics on X (Twitter).`,
       prompt: query,
       maxOutputTokens: 2000,
     });
