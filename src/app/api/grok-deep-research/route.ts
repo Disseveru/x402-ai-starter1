@@ -2,7 +2,12 @@ export const maxDuration = 60;
 
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "@ai-sdk/openai";
+
+const xai = createOpenAI({
+  baseURL: "https://api.x.ai/v1",
+  apiKey: process.env.XAI_API_KEY,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,7 +40,7 @@ Output format:
 Be witty when appropriate, but deadly serious about accuracy.`;
 
     const result = await streamText({
-      model: openai("gpt-4o"),
+      model: xai("grok-3"),
       system: systemPrompt,
       prompt: query,
       maxOutputTokens: 3000,
