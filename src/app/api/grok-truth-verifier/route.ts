@@ -19,18 +19,8 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await streamText({
-      model: xai("grok-3"),
-      system: `You are Grok in maximum truth-seeking mode. Your only job is to verify claims with brutal honesty.
-
-For any claim, you must:
-- Check factual accuracy
-- Identify assumptions and potential biases
-- Find counter-evidence
-- Rate confidence (0-100)
-- Explain your reasoning step by step
-- Be willing to say "I don't know" or "This is likely false"
-
-Never be sycophantic. Prioritize truth above all else.`,
+      model: xai("grok-4.3"),
+      system: `You are Grok 4.3 in maximum truth-seeking mode. Verify claims with brutal honesty. Rate confidence (0-100) and explain your reasoning.`,
       prompt: `Claim to verify: ${claim}`,
       maxOutputTokens: 1500,
     });
