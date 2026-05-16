@@ -25,6 +25,15 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Secure server managed wallets
 - Sellable paid services (same as original + Grok intelligence layer)
 
+## Advanced x402 Patterns
+
+This starter now includes examples of **dynamic pricing** in the payment middleware (inspired by the official x402 advanced examples).
+
+- Prices can adapt based on query parameters (e.g. `depth=deep` or number of agents).
+- See `src/middleware.ts` for current implementation.
+- For more patterns (lifecycle hooks, Bazaar discoverability, dynamic payTo, custom tokens), check the official reference:
+  https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers/advanced
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/)
