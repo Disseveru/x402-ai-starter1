@@ -24,6 +24,7 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Paywalled pages (for bots)
 - Secure server managed wallets
 - Sellable paid services (same as original + Grok intelligence layer)
+- **Bazaar Discovery Compatible** - All endpoints include comprehensive metadata for discovery via x402 Bazaar
 
 ## Tech Stack
 
@@ -86,6 +87,49 @@ This fork includes a full suite of specialized Grok-powered services:
 All powered by real **Grok-3** from xAI.
 
 See `GROK_AGENT_SUITE.md` for full details.
+
+## Bazaar Discovery Compliance
+
+This repository is compliant with the [x402 Bazaar discovery standards](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx). All paid endpoints (HTTP APIs and MCP tools) include comprehensive metadata for automatic discovery via the x402 Bazaar discovery layer.
+
+### Discoverable Endpoints
+
+**HTTP APIs** (9 endpoints):
+- `/api/deep-research` - Deep multi-source research reports with citations
+- `/api/la-insights` - Localized Los Angeles insights
+- `/api/competitor-analysis` - In-depth competitor analysis
+- `/api/trend-forecast` - Data-driven trend forecasting
+- `/api/grok-deep-research` - Premium Grok Deep Research (multi-step reasoning)
+- `/api/grok-agent-orchestrator` - Multi-agent orchestration planner
+- `/api/grok-truth-verifier` - Maximum truth-seeking claim verification
+- `/api/grok-x-intelligence` - Real-time X/Twitter intelligence
+- `/api/grok-strategic-planner` - Long-term strategic planning
+
+**MCP Tools** (3 tools):
+- `get_multi_token_prices` - Real-time crypto prices and market data
+- `analyze_public_url` - Fetch and analyze public webpages
+- `extract_contact_signals` - Extract contact info from text
+
+### Bazaar Metadata
+
+All endpoints include:
+- **Descriptions** - Clear, searchable descriptions of what each endpoint does
+- **Input Schemas** - JSON Schema definitions for request parameters
+- **Output Schemas** - Response format specifications
+- **Examples** - Sample requests and responses
+- **Service Metadata** - Service names, tags, and icons (ready for integration when x402-next v0.7.0+ is available)
+
+The full Bazaar metadata is documented in `src/lib/bazaar-metadata.ts` and will be automatically integrated once the x402-next and x402-mcp packages add full Bazaar extension support.
+
+### Discovery via Bazaar
+
+Once listed in a facilitator's discovery catalog, developers and AI agents can:
+1. Query `/discovery/resources` to find available services
+2. Filter by price, capabilities, and requirements
+3. Use x402 to pay for and access services automatically
+4. No manual setup, API keys, or account creation required
+
+For more information, see the [Bazaar documentation](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx).
 
 ## Going to Production
 
