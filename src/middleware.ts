@@ -1,6 +1,6 @@
-// x402 payment middleware - production build with Bazaar discovery compliance
-// This middleware now includes full Bazaar discovery metadata for all paid endpoints
-// Following bazaar.mdx dynamic route discovery standards from:
+// x402 payment middleware - production build with Bazaar-aligned discovery descriptions
+// This middleware currently provides enhanced endpoint descriptions for paid routes
+// using the Bazaar discovery spec as guidance until x402-next publishes extension metadata via discovery:
 // https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx
 
 import { paymentMiddleware } from "x402-next";
