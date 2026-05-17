@@ -30,7 +30,7 @@ export const middleware = paymentMiddleware(
       price: "$0.02",
       network: "base-sepolia",
       config: {
-        description: "Localized Los Angeles insights: events, traffic, trends. Accepts POST with {topic?: string}. Returns streaming LA-specific insights.",
+        description: "Localized Los Angeles insights: events, traffic, trends. Accepts POST with {topic?: string} (default topic: 'general'). Returns streaming LA-specific insights.",
       },
     },
     "/api/competitor-analysis": {
@@ -44,7 +44,7 @@ export const middleware = paymentMiddleware(
       price: "$0.04",
       network: "base-sepolia",
       config: {
-        description: "Data-driven trend forecasting and future scenario analysis. Accepts POST with {sector: string, timeframe?: string}. Returns streaming trend forecast with predictions.",
+        description: "Data-driven trend forecasting and future scenario analysis. Accepts POST with {sector: string, timeframe?: string} (default timeframe: '6 months'). Returns streaming trend forecast with predictions.",
       },
     },
     "/api/grok-deep-research": {
@@ -79,7 +79,7 @@ export const middleware = paymentMiddleware(
       price: "$0.20",
       network: "base-sepolia",
       config: {
-        description: "Long-term strategic planning with scenario modeling using Grok AI. Accepts POST with {objective: string, timeframe?: string, constraints?: string}. Returns strategic plan with scenario modeling and recommendations.",
+        description: "Long-term strategic planning with scenario modeling using Grok AI. Accepts POST with {objective: string, timeframe?: string, constraints?: string} (default timeframe: '12 months'). Returns strategic plan with scenario modeling and recommendations.",
       },
     },
   }
