@@ -24,7 +24,7 @@ This template built with [Next.js](https://nextjs.org), [AI SDK](https://ai-sdk.
 - Paywalled pages (for bots)
 - Secure server managed wallets
 - Sellable paid services (same as original + Grok intelligence layer)
-- **Bazaar Discovery Compatible** - All endpoints include comprehensive metadata for discovery via x402 Bazaar
+- **Bazaar Discovery Integration-Ready** - All endpoints include comprehensive metadata definitions aligned with x402 Bazaar
 
 ## Tech Stack
 
@@ -90,7 +90,7 @@ See `GROK_AGENT_SUITE.md` for full details.
 
 ## Bazaar Discovery Compliance
 
-This repository is compliant with the [x402 Bazaar discovery standards](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx). All paid endpoints (HTTP APIs and MCP tools) include comprehensive metadata for automatic discovery via the x402 Bazaar discovery layer.
+This repository is integration-ready with the [x402 Bazaar discovery standards](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx). All paid endpoints (HTTP APIs and MCP tools) include comprehensive metadata definitions documented for discovery compatibility.
 
 ### Discoverable Endpoints
 
@@ -119,7 +119,7 @@ All endpoints include:
 - **Examples** - Sample requests and responses
 - **Service Metadata** - Service names, tags, and icons (ready for integration when x402-next v0.7.0+ is available)
 
-The full Bazaar metadata is documented in `src/lib/bazaar-metadata.ts` and will be automatically integrated once the x402-next and x402-mcp packages add full Bazaar extension support.
+The full Bazaar metadata is documented in `src/lib/bazaar-metadata.ts` and can be integrated once the x402-next and x402-mcp packages add full Bazaar extension support.
 
 ### Discovery via Bazaar
 

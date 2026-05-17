@@ -5,7 +5,7 @@
  * According to bazaar.mdx standards: https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx
  *
  * NOTE: The current x402-next package (v0.6.0) does not yet support the full Bazaar extension schema.
- * This metadata file serves as documentation and will be integrated once x402-next is updated.
+ * This metadata file serves as integration-ready documentation until x402-next is updated.
  *
  * For full Bazaar compliance, the following metadata should be added to each endpoint:
  * 1. serviceName - Human-readable service name
@@ -18,7 +18,7 @@ export const bazaarMetadata = {
   "/api/deep-research": {
     serviceName: "Grok Deep Research",
     tags: ["research", "ai", "grok", "citations", "analysis"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/grok-research.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -62,7 +62,7 @@ export const bazaarMetadata = {
   "/api/la-insights": {
     serviceName: "LA Insights",
     tags: ["local", "events", "traffic", "los-angeles", "trends"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/la-insights.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -72,15 +72,14 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                topic: {
                   type: "string",
-                  description: "Query about LA events, traffic, or trends"
+                  description: "Topic about LA events, traffic, or trends (default: 'general')"
                 }
               },
-              required: ["query"]
             },
             example: {
-              query: "What major events are happening in LA this weekend?"
+              topic: "What major events are happening in LA this weekend?"
             }
           },
           output: {
@@ -94,7 +93,7 @@ export const bazaarMetadata = {
   "/api/competitor-analysis": {
     serviceName: "Competitor Analysis",
     tags: ["business", "analysis", "competitive-intelligence", "strategy"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/competitor-analysis.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -104,15 +103,20 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                company: {
                   type: "string",
-                  description: "Competitor or market to analyze"
+                  description: "Company to analyze"
+                },
+                industry: {
+                  type: "string",
+                  description: "Industry context for the analysis"
                 }
               },
-              required: ["query"]
+              required: ["company"]
             },
             example: {
-              query: "Analyze OpenAI's competitive position in the AI market"
+              company: "OpenAI",
+              industry: "AI"
             }
           },
           output: {
@@ -126,7 +130,7 @@ export const bazaarMetadata = {
   "/api/trend-forecast": {
     serviceName: "Trend Forecast",
     tags: ["forecasting", "trends", "predictions", "analysis", "futures"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/trend-forecast.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -136,15 +140,20 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                sector: {
                   type: "string",
-                  description: "Trend or industry to forecast"
+                  description: "Sector to forecast"
+                },
+                timeframe: {
+                  type: "string",
+                  description: "Forecast timeframe (default: '6 months')"
                 }
               },
-              required: ["query"]
+              required: ["sector"]
             },
             example: {
-              query: "Forecast the future of autonomous vehicles in the next 5 years"
+              sector: "Autonomous vehicles",
+              timeframe: "5 years"
             }
           },
           output: {
@@ -157,8 +166,8 @@ export const bazaarMetadata = {
   },
   "/api/grok-deep-research": {
     serviceName: "Grok Premium Research",
-    tags: ["grok", "research", "ai", "premium", "citations", "deep-analysis"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/grok-premium.png",
+    tags: ["grok", "research", "ai", "premium", "citations"],
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -176,13 +185,18 @@ export const bazaarMetadata = {
                   type: "string",
                   enum: ["quick", "deep", "comprehensive"],
                   description: "Research depth level (default: 'deep')"
+                },
+                includeX: {
+                  type: "boolean",
+                  description: "Include X/Twitter intelligence in research (default: true)"
                 }
               },
               required: ["query"]
             },
             example: {
               query: "Analyze the implications of quantum computing on modern cryptography",
-              depth: "comprehensive"
+              depth: "comprehensive",
+              includeX: true
             }
           },
           output: {
@@ -196,7 +210,7 @@ export const bazaarMetadata = {
   "/api/grok-agent-orchestrator": {
     serviceName: "Agent Orchestrator",
     tags: ["orchestration", "agents", "planning", "ai", "coordination"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/orchestrator.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -206,15 +220,20 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                goal: {
                   type: "string",
-                  description: "Complex task requiring agent orchestration"
+                  description: "Complex goal requiring agent orchestration"
+                },
+                constraints: {
+                  type: "string",
+                  description: "Constraints to apply to the orchestration plan"
                 }
               },
-              required: ["query"]
+              required: ["goal"]
             },
             example: {
-              query: "Plan a coordinated research and analysis project across multiple domains"
+              goal: "Plan a coordinated research and analysis project across multiple domains",
+              constraints: "Use no more than 3 specialized agents"
             }
           },
           output: {
@@ -228,7 +247,7 @@ export const bazaarMetadata = {
   "/api/grok-truth-verifier": {
     serviceName: "Truth Verifier",
     tags: ["verification", "fact-checking", "truth", "grok", "accuracy"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/truth-verifier.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -238,15 +257,15 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                claim: {
                   type: "string",
                   description: "Claim or statement to verify"
                 }
               },
-              required: ["query"]
+              required: ["claim"]
             },
             example: {
-              query: "Verify the claim that AI models can achieve AGI by 2027"
+              claim: "AI models can achieve AGI by 2027"
             }
           },
           output: {
@@ -260,7 +279,7 @@ export const bazaarMetadata = {
   "/api/grok-x-intelligence": {
     serviceName: "X Intelligence",
     tags: ["twitter", "social-media", "intelligence", "trends", "x"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/x-intelligence.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -292,7 +311,7 @@ export const bazaarMetadata = {
   "/api/grok-strategic-planner": {
     serviceName: "Strategic Planner",
     tags: ["strategy", "planning", "scenarios", "business", "long-term"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/strategic-planner.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -302,15 +321,25 @@ export const bazaarMetadata = {
             bodySchema: {
               type: "object",
               properties: {
-                query: {
+                objective: {
                   type: "string",
                   description: "Strategic planning scenario or business challenge"
+                },
+                timeframe: {
+                  type: "string",
+                  description: "Planning timeframe (default: '12 months')"
+                },
+                constraints: {
+                  type: "string",
+                  description: "Constraints to apply to the strategic plan"
                 }
               },
-              required: ["query"]
+              required: ["objective"]
             },
             example: {
-              query: "Develop a 5-year growth strategy for an AI startup"
+              objective: "Develop a 5-year growth strategy for an AI startup",
+              timeframe: "5 years",
+              constraints: "Assume a lean team and limited budget"
             }
           },
           output: {
@@ -332,7 +361,7 @@ export const mcpBazaarMetadata = {
   get_multi_token_prices: {
     serviceName: "Multi-Token Price Oracle",
     tags: ["crypto", "prices", "market-data", "trading"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/token-prices.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -360,7 +389,7 @@ export const mcpBazaarMetadata = {
   analyze_public_url: {
     serviceName: "URL Analyzer",
     tags: ["scraping", "analysis", "web", "competitor-research"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/url-analyzer.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {
@@ -388,7 +417,7 @@ export const mcpBazaarMetadata = {
   extract_contact_signals: {
     serviceName: "Contact Signal Extractor",
     tags: ["extraction", "contacts", "leads", "parsing"],
-    iconUrl: "https://x402-grok-starter.vercel.app/icons/contact-extractor.png",
+    iconUrl: "https://x402-grok-starter.vercel.app/screenshot.png",
     extensions: {
       bazaar: {
         info: {

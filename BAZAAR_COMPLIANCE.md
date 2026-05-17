@@ -1,10 +1,10 @@
 # Bazaar Discovery Compliance
 
-This document details how x402-grok-starter complies with the [x402 Bazaar discovery standards](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx).
+This document details how x402-grok-starter aligns with the [x402 Bazaar discovery standards](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx).
 
 ## Overview
 
-All paid endpoints in this repository (HTTP APIs and MCP tools) include comprehensive metadata for automatic discovery via the x402 Bazaar discovery layer. This enables developers and AI agents to:
+All paid endpoints in this repository (HTTP APIs and MCP tools) include comprehensive metadata documentation aligned to Bazaar discovery requirements. This enables developers and AI agents to:
 
 - Discover services programmatically via facilitator `/discovery/resources` endpoints
 - Understand capabilities, pricing, and schemas without manual documentation
@@ -13,13 +13,13 @@ All paid endpoints in this repository (HTTP APIs and MCP tools) include comprehe
 
 ## Compliance Status
 
-✅ **Fully Compliant** - All requirements from bazaar.mdx are met
+🟡 **Integration-Ready** - Metadata is complete, and publication through discovery endpoints is pending upstream x402 package support
 
 ### Bazaar Requirements
 
 Per [bazaar.mdx](https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx#dynamic-routes), the following are required for Bazaar compliance:
 
-1. ✅ **Discovery Metadata** - All paid endpoints include input/output schemas
+1. ✅ **Discovery Metadata** - All paid endpoints have documented input/output schemas
 2. ✅ **Service Metadata** - serviceName, tags, and iconUrl defined for all services
 3. ✅ **Input Schemas** - JSON Schema definitions for all request parameters
 4. ✅ **Output Schemas** - Response format specifications for all endpoints
@@ -30,7 +30,7 @@ Per [bazaar.mdx](https://github.com/x402-foundation/x402/blob/main/docs/extensio
 
 ### HTTP APIs (9 endpoints)
 
-All HTTP endpoints are configured in `src/middleware.ts` with full Bazaar metadata documented in `src/lib/bazaar-metadata.ts`.
+All HTTP endpoints are configured in `src/middleware.ts` with Bazaar metadata documented in `src/lib/bazaar-metadata.ts`.
 
 | Endpoint | Price | Service Name | Description |
 |----------|-------|--------------|-------------|
@@ -75,7 +75,7 @@ Each HTTP endpoint includes:
 
 ### MCP Tools (3 tools)
 
-All MCP tools are configured in `src/app/mcp/route.ts` with full Bazaar metadata documented in `src/lib/bazaar-metadata.ts`.
+All MCP tools are configured in `src/app/mcp/route.ts` with Bazaar metadata documented in `src/lib/bazaar-metadata.ts`.
 
 | Tool Name | Price | Service Name | Description |
 |-----------|-------|--------------|-------------|
@@ -123,7 +123,7 @@ Complete Bazaar discovery metadata for all endpoints (HTTP and MCP). This file s
 
 ### `src/app/mcp/route.ts`
 
-MCP server implementation with paid tools. Includes comprehensive documentation about Bazaar compliance and references to full metadata in `bazaar-metadata.ts`.
+MCP server implementation with paid tools. Includes documentation about Bazaar alignment and references to metadata in `bazaar-metadata.ts`.
 
 ## Integration Notes
 
@@ -138,7 +138,7 @@ The current x402 packages (x402-next v0.6.0 and x402-mcp v0.1.1) don't yet suppo
 
 ### Future Integration
 
-When x402-next and x402-mcp packages add Bazaar extension support (expected in v0.7.0+), the integration will be straightforward:
+When x402-next and x402-mcp packages add Bazaar extension support, the integration will be straightforward:
 
 1. Import metadata from `src/lib/bazaar-metadata.ts`
 2. Pass metadata to route configuration via `extensions.bazaar` field
@@ -157,8 +157,7 @@ export const middleware = paymentMiddleware(
       price: "$0.03",
       network: "base-sepolia",
       config: {
-        description: bazaarMetadata["/api/deep-research"].extensions.bazaar.info.input.example,
-        ...bazaarMetadata["/api/deep-research"]
+        description: bazaarMetadata["/api/deep-research"].extensions.bazaar.info.output.description
       }
     },
     // ... other routes
@@ -223,4 +222,4 @@ For questions or issues related to Bazaar compliance:
 
 **Last Updated**: 2026-05-17
 **Compliance Version**: bazaar.mdx dynamic routes specification
-**Status**: ✅ Fully Compliant
+**Status**: 🟡 Integration-Ready

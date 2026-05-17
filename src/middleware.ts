@@ -1,4 +1,4 @@
-// x402 payment middleware - production build with Bazaar-aligned discovery descriptions
+// x402 payment middleware with Bazaar-aligned discovery descriptions
 // This middleware currently provides enhanced endpoint descriptions for paid routes
 // using the Bazaar discovery spec as guidance until x402-next publishes extension metadata via discovery:
 // https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx
@@ -30,42 +30,42 @@ export const middleware = paymentMiddleware(
       price: "$0.02",
       network: "base-sepolia",
       config: {
-        description: "Localized Los Angeles insights: events, traffic, trends. Accepts POST with {query: string}. Returns streaming LA-specific insights.",
+        description: "Localized Los Angeles insights: events, traffic, trends. Accepts POST with {topic?: string}. Returns streaming LA-specific insights.",
       },
     },
     "/api/competitor-analysis": {
       price: "$0.045",
       network: "base-sepolia",
       config: {
-        description: "In-depth competitor analysis with strategic insights powered by Grok. Accepts POST with {query: string}. Returns streaming competitive analysis.",
+        description: "In-depth competitor analysis with strategic insights powered by Grok. Accepts POST with {company: string, industry?: string}. Returns streaming competitive analysis.",
       },
     },
     "/api/trend-forecast": {
       price: "$0.04",
       network: "base-sepolia",
       config: {
-        description: "Data-driven trend forecasting and future scenario analysis. Accepts POST with {query: string}. Returns streaming trend forecast with predictions.",
+        description: "Data-driven trend forecasting and future scenario analysis. Accepts POST with {sector: string, timeframe?: string}. Returns streaming trend forecast with predictions.",
       },
     },
     "/api/grok-deep-research": {
       price: "$0.22",
       network: "base-sepolia",
       config: {
-        description: "Premium Grok Deep Research - multi-step reasoning with real citations using Grok 4.3. Accepts POST with {query: string, depth?: string}. Returns premium research stream with verified citations.",
+        description: "Premium Grok Deep Research - multi-step reasoning with real citations using Grok 4.3. Accepts POST with {query: string, depth?: 'quick'|'deep'|'comprehensive', includeX?: boolean}. Returns premium research stream with verified citations.",
       },
     },
     "/api/grok-agent-orchestrator": {
       price: "$0.18",
       network: "base-sepolia",
       config: {
-        description: "Multi-agent orchestration planner using Grok AI. Accepts POST with {query: string}. Returns orchestration plan with agent assignments and workflow.",
+        description: "Multi-agent orchestration planner using Grok AI. Accepts POST with {goal: string, constraints?: string}. Returns orchestration plan with agent assignments and workflow.",
       },
     },
     "/api/grok-truth-verifier": {
       price: "$0.12",
       network: "base-sepolia",
       config: {
-        description: "Maximum truth-seeking claim verification using Grok's fact-checking capabilities. Accepts POST with {query: string}. Returns verification report with evidence and confidence scores.",
+        description: "Maximum truth-seeking claim verification using Grok's fact-checking capabilities. Accepts POST with {claim: string}. Returns verification report with evidence and confidence scores.",
       },
     },
     "/api/grok-x-intelligence": {
@@ -79,7 +79,7 @@ export const middleware = paymentMiddleware(
       price: "$0.20",
       network: "base-sepolia",
       config: {
-        description: "Long-term strategic planning with scenario modeling using Grok AI. Accepts POST with {query: string}. Returns strategic plan with scenario modeling and recommendations.",
+        description: "Long-term strategic planning with scenario modeling using Grok AI. Accepts POST with {objective: string, timeframe?: string, constraints?: string}. Returns strategic plan with scenario modeling and recommendations.",
       },
     },
   }

@@ -1,7 +1,7 @@
 /**
- * x402 MCP Server with Bazaar Discovery Compliance
+ * x402 MCP Server with Bazaar-aligned tool metadata documentation
  *
- * This MCP server exposes paid tools with full Bazaar discovery metadata.
+ * This MCP server exposes paid tools with enhanced descriptions and input schemas.
  * Following bazaar.mdx standards: https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx
  *
  * NOTE: The current x402-mcp package (v0.1.1) does not yet support the full Bazaar extension schema.
