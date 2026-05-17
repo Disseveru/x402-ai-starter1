@@ -74,6 +74,7 @@ export const bazaarMetadata = {
               properties: {
                 topic: {
                   type: "string",
+                  default: "general",
                   description: "Topic about LA events, traffic, or trends (default: 'general')"
                 }
               },
@@ -146,6 +147,7 @@ export const bazaarMetadata = {
                 },
                 timeframe: {
                   type: "string",
+                  default: "6 months",
                   description: "Forecast timeframe (default: '6 months')"
                 }
               },
@@ -327,6 +329,7 @@ export const bazaarMetadata = {
                 },
                 timeframe: {
                   type: "string",
+                  default: "12 months",
                   description: "Planning timeframe (default: '12 months')"
                 },
                 constraints: {
