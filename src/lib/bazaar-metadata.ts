@@ -39,6 +39,7 @@ export const bazaarMetadata = {
                 },
                 includeX: {
                   type: "boolean",
+                  default: true,
                   description: "Include X/Twitter intelligence in research (default: true)"
                 }
               },
