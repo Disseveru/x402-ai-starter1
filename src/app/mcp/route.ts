@@ -1,3 +1,21 @@
+/**
+ * x402 MCP Server with Bazaar-aligned tool metadata documentation
+ *
+ * This MCP server exposes paid tools with enhanced descriptions and input schemas.
+ * Following bazaar.mdx standards: https://github.com/x402-foundation/x402/blob/main/docs/extensions/bazaar.mdx
+ *
+ * NOTE: The current x402-mcp package (v0.1.1) does not yet support the full Bazaar extension schema.
+ * Bazaar metadata for these tools is documented in src/lib/bazaar-metadata.ts and will be integrated
+ * once x402-mcp is updated to support declareDiscoveryExtension() for MCP tools.
+ *
+ * MCP Tool Discovery Format (per bazaar.mdx):
+ * - type: "mcp"
+ * - toolName: The tool name used in tools/call requests
+ * - inputSchema: JSON Schema for the tool's arguments
+ * - description: Human-readable description
+ * - transport: "sse" or "streamable-http"
+ * - example: Example arguments object
+ */
 import { createPaidMcpHandler } from "x402-mcp";
 import z from "zod";
 import { facilitator } from "@coinbase/x402";
@@ -11,7 +29,9 @@ async function getHandler() {
     const sellerAccount = await getOrCreateSellerAccount();
     handler = createPaidMcpHandler(
       (server) => {
-        // === HIGH-VALUE UNTAPPED MCP TOOLS (Highest demand 2026) ===
+        // === HIGH-VALUE PAID MCP TOOLS (Bazaar Discovery Ready) ===
+        // Each tool below includes comprehensive descriptions and schema definitions
+        // ready for Bazaar discovery integration
 
         server.paidTool(
           "get_multi_token_prices",
